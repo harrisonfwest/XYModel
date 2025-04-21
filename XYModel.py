@@ -11,7 +11,7 @@ def newLattice1D(width: int) -> np.ndarray:
     return lattice
 
 def showLattice(lattice: np.ndarray) -> None:
-    plt.imshow(lattice, cmap = 'hsv', vmin = -np.pi, vmax = +np.pi)
+    plt.imshow(lattice, cmap = 'twilight_shifted', vmin = -np.pi, vmax = +np.pi)
     plt.ylim(0, len(lattice[0]))
     plt.xlim(0, len(lattice[0]))
     plt.colorbar(ticks = [-np.pi+.1, 0, np.pi-.1]).ax.set_yticklabels(['-$\pi$', 0, '$\pi$'])
@@ -42,21 +42,19 @@ def energyof2D(lattice: np.ndarray) -> float:
 def equilibrate2D(lattice: np.ndarray, temp: float) -> np.ndarray:
     currLattice = lattice
     width = len(lattice[0])
-    for k in range(5000):
+    for k in range(len(lattice)**2):
         i = np.random.choice(range(width))
         j = np.random.choice(range(width))
         oldE = energyof2D(currLattice)
         newLattice = np.copy(currLattice)
-        newLattice[i][j] += 0.25
-        if newLattice[i][j] > np.pi:
-             newLattice[i][j] -= (2*np.pi)
+        newLattice[i][j] = np.random.uniform(-np.pi, np.pi)
         newE = energyof2D(newLattice)
         if np.random.uniform(0, 1) < np.exp(-(newE - oldE)/temp):
             currLattice[i][j] = newLattice[i][j]
     return currLattice
 
-sample = squareLattice2D(50)
+sample = squareLattice2D(512)
 showLattice(sample)
-for _ in range(1000):
+while True:
     sample = equilibrate2D(sample, 1.5 )
     showLattice(sample)
