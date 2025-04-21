@@ -2,6 +2,7 @@
 Created on Sun Apr 20, 2025 @ 4:09 pm
 @author: Harrison West, Renn Summersgill
 """
+import os
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -51,14 +52,15 @@ class lattice():
         self.im.set_data(grid)
         return self.im
 
-    def make_animation(self):
-        anim = animation.FuncAnimation(self.fig, self.animate, frames = self.width, interval = 10)
-        anim.save('lattice.gif', fps = 30)
+    def make_animation(self, duration):
+        anim = animation.FuncAnimation(self.fig, self.animate, frames = duration * 1000, interval = 10)
+        count = 0
+        name = 'lattice.gif'
+        while os.path.exists(name):
+            count += 1
+        name = 'lattice' + str(count) + '.gif'
 
-sample = lattice(temperature = .1, width = 128)
+        anim.save(name)
 
-sample.make_animation()
-
-# while True:
-#     sample.poke()
-#     sample.plot_lattice()
+sample = lattice(temperature = .1, width = 256)
+sample.make_animation(duration = 10)
