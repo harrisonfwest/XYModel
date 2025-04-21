@@ -63,5 +63,5 @@ class lattice():
         anim.save(name)
         print('Animation saved to ' + name)
 
-sample = lattice(temperature = .1, width = 256)
+sample = lattice(temperature = .1, width = 64)
 sample.make_animation(duration = 15)
