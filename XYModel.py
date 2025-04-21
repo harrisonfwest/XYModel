@@ -53,7 +53,7 @@ class lattice():
         return self.im
 
     def make_animation(self, duration = 8):
-        anim = animation.FuncAnimation(self.fig, self.animate, frames = duration * 10, interval = 100)
+        anim = animation.FuncAnimation(self.fig, self.animate, frames = duration * 25, interval = 40)
         name = 'lattice.gif'
         count = 0
         while os.path.exists(name):
@@ -61,5 +61,5 @@ class lattice():
             name = 'lattice' + str(count) + '.gif'
         anim.save(name)
 
-sample = lattice(width = 256)
-sample.make_animation(duration = 20)
+sample = lattice(width = 128)
+sample.make_animation(duration = 15)
