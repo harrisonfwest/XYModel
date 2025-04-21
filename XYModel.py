@@ -57,11 +57,12 @@ class lattice():
         count = 0
         name = 'lattice' + str(count) + '.gif'
         while os.path.exists(name):
+            print('exists')
             count += 1
+            name = 'lattice' + str(count) + '.gif'
         name = 'lattice' + str(count) + '.gif'
 
         anim.save(name)
-        print('Animation saved to ' + name)
 
-sample = lattice(width = 4)
+sample = lattice()
 sample.make_animation()
