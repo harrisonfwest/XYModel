@@ -32,8 +32,8 @@ class lattice():
             if np.random.rand() < np.exp(-(newEnergy - oldEnergy) * beta):
                 self.spins[site] = newSpin
         grid = self.spins.reshape(self.width, self.width)
-        plt.imshow(grid, cmap='twilight_shifted', vmin=-np.pi, vmax=+np.pi)
-        plt.colorbar(ticks=[-np.pi + .1, 0, np.pi - .1]).ax.set_yticklabels(['-$\pi$', 0, '$\pi$'])
+        plt.imshow(grid, cmap='hsv', vmin=-np.pi, vmax=+np.pi)
+        plt.colorbar(ticks=[-np.pi + .05, 0, np.pi - .05]).ax.set_yticklabels(['-$\pi$', 0, '$\pi$'])
         plt.ylim(0, self.width)
         plt.show()
         plt.clf()
@@ -44,6 +44,6 @@ class lattice():
             energy[site] = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site])
         return energy
 
-sample = lattice(width = 40)
+sample = lattice(temperature = .01, width = 256)
 while True:
     sample.poke()
