@@ -5,6 +5,7 @@ Created on Sun Apr 20, 2025 @ 4:09 pm
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import animation
 
 class lattice():
     def __init__(self, temperature = .1, width = 15):
@@ -15,11 +16,13 @@ class lattice():
         self.spins = np.random.uniform(-np.pi, np.pi, self.size)
         self.temperature = temperature
         self.energy = np.sum(self.get_energy())/N
+        self.fig = plt.figure()
+        self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight_shifted',
+                             vmin = -np.pi, vmax = +np.pi)
+        plt.colorbar(ticks=[-np.pi + .1, 0, np.pi - .1]).ax.set_yticklabels(['-$\pi$', 0, '$\pi$'])
+        plt.axis('off')
 
-    def set_temperature(self, temperature):
-        self.temperature = temperature
-
-    def poke(self): # tries a random spin for each lattice site in a random order
+    def poke(self): # tries a random new spin for each lattice site, in a random order of sites
         beta = 1 / self.temperature
         sites = list(range(len(self.spins)))
         np.random.shuffle(sites)
@@ -38,14 +41,24 @@ class lattice():
             energy[site] = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site])
         return energy
 
-    def plot_lattice(self):
+    def animate(self):
         grid = self.spins.reshape(self.width, self.width)
-        plt.imshow(grid, cmap = 'twilight_shifted', vmin = -np.pi, vmax = +np.pi)
-        plt.colorbar(ticks=[-np.pi + .1, 0, np.pi - .1]).ax.set_yticklabels(['-$\pi$', 0, '$\pi$'])
-        plt.ylim(0, self.width)
-        plt.show()
+        self.im = plt.imshow(grid, cmap = 'twilight_shifted', vmin = -np.pi, vmax = +np.pi)
 
-sample = lattice(width = 40)
-while True:
-    sample.poke()
-    sample.plot_lattice()
+    def animate(self, frame):
+        self.poke()
+        grid = self.spins.reshape(self.width, self.width)
+        self.im.set_data(grid)
+        return self.im
+
+    def make_animation(self):
+        anim = animation.FuncAnimation(self.fig, self.animate, frames = self.width, interval = 10)
+        anim.save('lattice.gif', fps = 30)
+
+sample = lattice(temperature = .1, width = 128)
+
+sample.make_animation()
+
+# while True:
+#     sample.poke()
+#     sample.plot_lattice()
