@@ -2,8 +2,8 @@
 Created on Sun Apr 20, 2025 @ 4:09 pm
 @author: Harrison West, Renn Summersgill
 """
-import os
 
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import animation
@@ -63,5 +63,5 @@ class lattice():
         anim.save(name)
         print('Animation saved to ' + name)
 
-sample = lattice()
+sample = lattice(width = 4)
 sample.make_animation()
