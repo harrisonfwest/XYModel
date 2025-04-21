@@ -33,16 +33,14 @@ def energyof2D(lattice: np.ndarray) -> float:
     energy = 0
     for i in range(len(lattice)):
         for j in range(len(lattice)):
-            energy -= (np.cos(lattice[i, j] - lattice[(i+1)%len(lattice[0]), (j)%len(lattice[0])])
-            + np.cos(lattice[i, j] - lattice[(i-1)%len(lattice[0]), (j)%len(lattice[0])])
-            + np.cos(lattice[i, j] - lattice[(i)%len(lattice[0]), (j+1)%len(lattice[0])])
-            + np.cos(lattice[i, j] - lattice[(i)%len(lattice[0]), (j-1)%len(lattice[0])]))
+            energy -= (np.cos(lattice[i, j] - lattice[(i+1)%len(lattice[0]), j])
+            + np.cos(lattice[i, j] - lattice[i, (j+1)%len(lattice[0])]))
     return energy/(2 * len(lattice)**2)
 
 def equilibrate2D(lattice: np.ndarray, temp: float) -> np.ndarray:
     currLattice = lattice
     width = len(lattice[0])
-    for k in range(len(lattice)**2):
+    for k in range(len(lattice)):
         i = np.random.choice(range(width))
         j = np.random.choice(range(width))
         oldE = energyof2D(currLattice)
@@ -56,5 +54,5 @@ def equilibrate2D(lattice: np.ndarray, temp: float) -> np.ndarray:
 sample = squareLattice2D(512)
 showLattice(sample)
 while True:
-    sample = equilibrate2D(sample, 1.5 )
+    sample = equilibrate2D(sample, 0.005 )
     showLattice(sample)
