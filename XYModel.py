@@ -37,24 +37,32 @@ def energyof2D(lattice: np.ndarray) -> float:
     return energy
 
 def equilibrate2D(lattice: np.ndarray, temp: float) -> np.ndarray:
+    currLattice = lattice
     width = len(lattice[0])
-    for _ in range(20000):
-        i = np.random.choice(width)
-        j = np.random.choice(width)
-        oldE = energyof2D(lattice)
-        newLattice = lattice
-        for k in np.linspace(2*np.pi, 0):
-            newL
-        if newLattice[i, j] + 0.5 > np.pi:
-            newLattice[i, j] = newLattice[i, j] - (np.pi - 0.5)
-        else:
-            newLattice[i, j] + 0.5
+    for k in range(1000):
+        i = np.random.choice(range(width))
+        j = np.random.choice(range(width))
+        oldE = energyof2D(currLattice)
+        newLattice = currLattice
+        newLattice[i][j] += 0.25
+        if newLattice[i][j] > np.pi:
+             newLattice[i][j] -= (2*np.pi)
         newE = energyof2D(newLattice)
-        if newE < oldE or np.random.random() < np.exp(-newE/temp):
-            lattice = newLattice
-    return lattice
+        if (newE - oldE) < 0 or np.random.rand() < np.exp(-(newE - oldE)/temp):
+            print('old value: ', currLattice[i][j], ' new value: ', newLattice[i][j])
+            currLattice[i][j] = newLattice[i][j]
+    return currLattice
 
 sample = squareLattice2D(50)
 showLattice(sample)
-sample = equilibrate2D(sample, 1.5)
-showLattice(sample)
+sample2 = equilibrate2D(sample, 20)
+for i in range(len(sample[0])):
+    for j in range(len(sample[0])):
+        if sample[i][j] != sample2[i][j]:
+            print('Difference')
+print(sample)
+print(sample2)
+
+# while True:
+#     sample = equilibrate2D(sample, 1.5)
+#     showLattice(sample)
