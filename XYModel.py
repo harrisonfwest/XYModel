@@ -52,7 +52,7 @@ class lattice():
         self.im.set_data(grid)
         return self.im
 
-    def make_animation(self, duration):
+    def make_animation(self, duration = 8):
         anim = animation.FuncAnimation(self.fig, self.animate, frames = duration * 1000, interval = 10)
         count = 0
         name = 'lattice.gif'
@@ -61,6 +61,7 @@ class lattice():
         name = 'lattice' + str(count) + '.gif'
 
         anim.save(name)
+        print('Animation saved to ' + name)
 
 sample = lattice(temperature = .1, width = 256)
-sample.make_animation(duration = 10)
+sample.make_animation(duration = 15)
