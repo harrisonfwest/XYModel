@@ -54,15 +54,12 @@ class lattice():
 
     def make_animation(self, duration = 8):
         anim = animation.FuncAnimation(self.fig, self.animate, frames = duration * 10, interval = 100)
+        name = 'lattice.gif'
         count = 0
-        name = 'lattice' + str(count) + '.gif'
         while os.path.exists(name):
-            print('exists')
             count += 1
             name = 'lattice' + str(count) + '.gif'
-        name = 'lattice' + str(count) + '.gif'
-
         anim.save(name)
 
-sample = lattice()
-sample.make_animation()
+sample = lattice(width = 256)
+sample.make_animation(duration = 20)
