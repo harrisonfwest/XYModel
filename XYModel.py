@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 
 class lattice():
-    def __init__(self, temperature = .1, width = 15):
+    def __init__(self, temperature = .01, width = 64):
         self.width = width
         self.size = self.width * self.width
         L, N = self.width, self.size
@@ -63,5 +63,5 @@ class lattice():
         anim.save(name)
         print('Animation saved to ' + name)
 
-sample = lattice(temperature = .1, width = 64)
-sample.make_animation(duration = 20)
+sample = lattice()
+sample.make_animation()
