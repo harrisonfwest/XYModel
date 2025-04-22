@@ -7,6 +7,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import animation
+from IPython.display import display
 
 class lattice():
     def __init__(self, temperature = .01, width = 64, external_field = 0.0):
@@ -56,17 +57,31 @@ class lattice():
 
     def make_animation(self, duration = 8, prepend = 'lattice'):
         anim = animation.FuncAnimation(self.fig, self.animate, frames = duration * 25, interval = 40)
+        video = anim.to_html5_video()
+
+        # embedding for the video
+        html = display.HTML(video)
+
+        # draw the animation
+        display.display(html)
+        plt.close()
+
+        return
+
         name = prepend + '.gif'
         count = 0
         while os.path.exists(name):
             count += 1
             name = prepend + str(count) + '.gif'
-        anim.save(name)
+        anim.save(name, writer = 'PillowWriter')
 
     def show(self):
         grid = self.spins.reshape(self.width, self.width)
         plt.imshow(grid, cmap = 'twilight_shifted', vmin = -np.pi, vmax = +np.pi)
+        plt.colorbar(ticks=[-np.pi + .1, 0, np.pi - .1]).ax.set_yticklabels(['-$\pi$', 0, '$\pi$'])
+        plt.axis('off')
         plt.show()
 
 sample = lattice(width = 512)
-sample.make_animation(prepend = 'lattice')
+sample.make_animation()
+# sample.make_animation(prepend = 'lattice')
