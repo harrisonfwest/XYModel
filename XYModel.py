@@ -68,7 +68,5 @@ class lattice():
         plt.imshow(grid, cmap = 'twilight_shifted', vmin = -np.pi, vmax = +np.pi)
         plt.show()
 
-sample = lattice(width = 64, external_field = 1)
-sample.make_animation(prepend = 'latticeWith-h_1_')
-sample = lattice(width = 64, external_field = -1)
-sample.make_animation(prepend = 'latticeWith-h_-1_')
+sample = lattice(width = 512)
+sample.make_animation(prepend = 'lattice')
