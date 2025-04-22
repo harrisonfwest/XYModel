@@ -9,10 +9,10 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 
 class lattice():
-    def __init__(self, temperature = .01, width = 64, external_field = 0.0):
+    def __init__(self, temperature = .01, width = 64, external_direction = 0.0, external_strength = 0.0):
         self.width = width
         self.size = self.width * self.width
-        self.h = external_field
+        self.h = external_strength
         L, N = self.width, self.size
         self.neighbors = {i : ((i//L)*L + (i+1)%L, (i+L)%N, (i//L)*L + (i-L)%L, (i-L)%N) for i in list(range(N))}
         self.spins = np.random.uniform(-np.pi, np.pi, self.size)
@@ -49,7 +49,8 @@ class lattice():
         self.im = plt.imshow(grid, cmap = 'twilight_shifted', vmin = -np.pi, vmax = +np.pi)
 
     def animate(self, frame):
-        self.poke()
+        for _ in range(15):
+            self.poke()
         grid = self.spins.reshape(self.width, self.width)
         self.im.set_data(grid)
         return self.im
@@ -63,5 +64,5 @@ class lattice():
             name = 'lattice' + str(count) + '.gif'
         anim.save(name)
 
-sample = lattice(width = 128, external_field = np.pi/2)
-sample.make_animation(duration = 15)
+sample = lattice(width = 128, external_direction = np.pi/2)
+sample.make_animation()
