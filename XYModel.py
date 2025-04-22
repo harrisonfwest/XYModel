@@ -9,9 +9,10 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 
 class lattice():
-    def __init__(self, temperature = .01, width = 64):
+    def __init__(self, temperature = .01, width = 64, external_field = 0.0):
         self.width = width
         self.size = self.width * self.width
+        self.h = external_field
         L, N = self.width, self.size
         self.neighbors = {i : ((i//L)*L + (i+1)%L, (i+L)%N, (i//L)*L + (i-L)%L, (i-L)%N) for i in list(range(N))}
         self.spins = np.random.uniform(-np.pi, np.pi, self.size)
@@ -39,7 +40,8 @@ class lattice():
     def get_energy(self):
         energy = np.zeros(np.shape(self.spins))
         for site in range(len(self.spins)):
-            energy[site] = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site])
+            energy[site] = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site])\
+            - self.h * self.spins[site]
         return energy
 
     def animate(self):
@@ -61,5 +63,5 @@ class lattice():
             name = 'lattice' + str(count) + '.gif'
         anim.save(name)
 
-sample = lattice(width = 128)
+sample = lattice(width = 128, external_field = np.pi/2)
 sample.make_animation(duration = 15)
