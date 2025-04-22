@@ -41,7 +41,7 @@ class lattice():
         energy = np.zeros(np.shape(self.spins))
         for site in range(len(self.spins)):
             energy[site] = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site])\
-            - self.h * self.spins[site]
+            - self.h * np.cos(self.spins[site])
         return energy
 
     def animate(self):
@@ -64,5 +64,7 @@ class lattice():
             name = 'lattice' + str(count) + '.gif'
         anim.save(name)
 
-sample = lattice(width = 128, external_direction = np.pi/2)
+sample = lattice(width = 64, external_direction = 1)
+sample.make_animation()
+sample = lattice(width = 64, external_direction = -1)
 sample.make_animation()
