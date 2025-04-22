@@ -9,10 +9,10 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 
 class lattice():
-    def __init__(self, temperature = .01, width = 64, external_direction = 0.0, external_strength = 0.0):
+    def __init__(self, temperature = .01, width = 64, external_field = 0.0):
         self.width = width
         self.size = self.width * self.width
-        self.h = external_strength
+        self.h = external_field
         L, N = self.width, self.size
         self.neighbors = {i : ((i//L)*L + (i+1)%L, (i+L)%N, (i//L)*L + (i-L)%L, (i-L)%N) for i in list(range(N))}
         self.spins = np.random.uniform(-np.pi, np.pi, self.size)
@@ -29,19 +29,18 @@ class lattice():
         sites = list(range(len(self.spins)))
         np.random.shuffle(sites)
         for site in sites:
-            oldEnergy = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site])
+            oldEnergy = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site]) - (self.h * np.cos(self.spins[site]))
             newSpin = self.spins[site] + np.random.uniform(-np.pi, np.pi)
-            if newSpin > 2*np.pi:
+            if newSpin >= np.pi:
                 newSpin -= 2*np.pi
-            newEnergy = -sum(np.cos(newSpin - self.spins[n]) for n in self.neighbors[site])
+            newEnergy = -sum(np.cos(newSpin - self.spins[n]) for n in self.neighbors[site]) - (self.h * np.cos(self.spins[site]))
             if np.random.rand() < np.exp(-(newEnergy - oldEnergy) * beta):
                 self.spins[site] = newSpin
 
     def get_energy(self):
         energy = np.zeros(np.shape(self.spins))
         for site in range(len(self.spins)):
-            energy[site] = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site])\
-            - self.h * np.cos(self.spins[site])
+            energy[site] = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site]) - (self.h * np.cos(self.spins[site]))
         return energy
 
     def animate(self):
@@ -55,16 +54,21 @@ class lattice():
         self.im.set_data(grid)
         return self.im
 
-    def make_animation(self, duration = 8):
+    def make_animation(self, duration = 8, prepend = 'lattice'):
         anim = animation.FuncAnimation(self.fig, self.animate, frames = duration * 25, interval = 40)
-        name = 'lattice.gif'
+        name = prepend + '.gif'
         count = 0
         while os.path.exists(name):
             count += 1
-            name = 'lattice' + str(count) + '.gif'
+            name = prepend + str(count) + '.gif'
         anim.save(name)
 
-sample = lattice(width = 64, external_direction = 1)
-sample.make_animation()
-sample = lattice(width = 64, external_direction = -1)
-sample.make_animation()
+    def show(self):
+        grid = self.spins.reshape(self.width, self.width)
+        plt.imshow(grid, cmap = 'twilight_shifted', vmin = -np.pi, vmax = +np.pi)
+        plt.show()
+
+sample = lattice(width = 64, external_field = 1)
+sample.make_animation(prepend = 'latticeWith-h_1_')
+sample = lattice(width = 64, external_field = -1)
+sample.make_animation(prepend = 'latticeWith-h_-1_')
