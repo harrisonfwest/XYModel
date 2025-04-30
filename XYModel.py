@@ -60,12 +60,12 @@ class lattice():
         anim = animation.FuncAnimation(self.fig, self.animate, frames = 1000, interval = 20)
         name = prepend + '.gif'
         count = 0
-        while os.path.exists(name):
+        while os.path.exists('gifs/' + name):
             count += 1
             name = prepend + str(count) + '.gif'
-        anim.save(name)
+        anim.save('gifs/' + name)
         return
 
 for _ in range(5):
-    sample = lattice(width = 32)
+    sample = lattice(width = 64)
     sample.make_animation()
