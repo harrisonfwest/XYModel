@@ -20,7 +20,8 @@ class lattice():
         self.fig = plt.figure()
         self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight_shifted',
                              vmin = 0, vmax = 2*np.pi)
-        plt.colorbar(ticks=[0, np.pi, 2*np.pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'])
+        cbar = plt.colorbar(self.im, ticks=[0, np.pi, 2*np.pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'])
+        cbar.set_label('Spin angle')
         plt.axis('off')
 
     def poke(self): # tries a random new spin for each lattice site, in a random order of sites
