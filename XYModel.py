@@ -19,7 +19,7 @@ class lattice():
         self.spins = np.random.uniform(0, 2*pi, self.size)
         self.temperature = temperature
         self.fig = plt.figure()
-        self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight_shifted',
+        self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight',
                              vmin = 0, vmax = 2*pi)
         plt.colorbar(self.im, ticks=[0, pi, 2*pi], extend = 'both').ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
         plt.axis('off')
