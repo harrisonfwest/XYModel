@@ -54,8 +54,7 @@ class lattice():
 
     def animate(self, frame):
         self.poke()
-        grid = self.spins.reshape(self.width, self.width)
-        self.im.set_data(grid)
+        self.im.set_data(self.spins.reshape(self.width, self.width))
         return self.im
 
     def make_animation(self, prepend : str = 'lattice') -> None:
