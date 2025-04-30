@@ -44,8 +44,7 @@ class lattice():
         return energy
 
     def animate(self, frame):
-        for _ in range(15):
-            self.poke()
+        self.poke()
         grid = self.spins.reshape(self.width, self.width)
         self.im.set_data(grid)
         return self.im
@@ -69,5 +68,5 @@ class lattice():
         plt.axis('off')
         plt.show()
 
-sample = lattice(width = 64)
+sample = lattice(width = 128)
 sample.make_animation()
