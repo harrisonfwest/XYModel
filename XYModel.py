@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import animation
 
+pi = np.pi
 class lattice():
     def __init__(self, temperature = .01, width = 64, external_field = 0.0):
         self.width = width
@@ -15,12 +16,12 @@ class lattice():
         self.h = external_field
         L, N = self.width, self.size
         self.neighbors = {i : ((i//L)*L + (i+1)%L, (i+L)%N, (i//L)*L + (i-1)%L, (i-L)%N) for i in list(range(N))}
-        self.spins = np.random.uniform(0, 2*np.pi, self.size)
+        self.spins = np.random.uniform(0, 2*pi, self.size)
         self.temperature = temperature
         self.fig = plt.figure()
         self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight_shifted',
-                             vmin = 0, vmax = 2*np.pi)
-        plt.colorbar(self.im, ticks=[0, np.pi, 2*np.pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
+                             vmin = 0, vmax = 2*pi)
+        plt.colorbar(self.im, ticks=[0, pi, 2*pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
         plt.axis('off')
 
     def poke(self): # tries a random new spin for each lattice site, in a random order of sites
@@ -29,9 +30,9 @@ class lattice():
         np.random.shuffle(sites)
         for site in sites:
             oldEnergy = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site]) - (self.h * np.cos(self.spins[site]))
-            newSpin = self.spins[site] + np.random.uniform(-np.pi, np.pi)
-            if newSpin >= 2*np.pi:
-                newSpin -= 2*np.pi
+            newSpin = self.spins[site] + np.random.uniform(0, 2*pi)
+            if newSpin >= 2*pi:
+                newSpin -= 2*pi
             newEnergy = -sum(np.cos(newSpin - self.spins[n]) for n in self.neighbors[site]) - (self.h * np.cos(self.spins[site]))
             if newEnergy <= oldEnergy or np.random.rand() < np.exp(-(newEnergy - oldEnergy) * beta):
                 self.spins[site] = newSpin
@@ -64,7 +65,7 @@ class lattice():
 
     def show(self):
         grid = self.spins.reshape(self.width, self.width)
-        plt.imshow(grid, cmap = 'twilight_shifted', vmin = 0, vmax = 2*np.pi)
+        plt.imshow(grid, cmap = 'twilight_shifted', vmin = 0, vmax = 2*pi)
         plt.axis('off')
         plt.show()
 
