@@ -48,32 +48,24 @@ class lattice():
         # to get average energy per site of system
         return energy
 
-    def animate(self):
+    def animate(self, frame):
         for _ in range(15):
             self.poke()
         grid = self.spins.reshape(self.width, self.width)
         self.im.set_data(grid)
         return self.im
 
-    def make_animation(self, duration = 8, prepend = 'lattice'):
-        anim = animation.FuncAnimation(self.fig, self.animate, frames = duration * 25, interval = 40)
-        video = anim.to_html5_video()
+    def make_animation(self):
+        anim = animation.FuncAnimation(self.fig, self.animate, repeat = True, frames = 200, interval = 50)
 
-        # embedding for the video
-        html = display.HTML(video)
-
-        # draw the animation
-        display.display(html)
-        plt.close()
-
-        return
-
+        prepend = 'lattice'
         name = prepend + '.gif'
         count = 0
         while os.path.exists(name):
             count += 1
             name = prepend + str(count) + '.gif'
-        anim.save(name, writer = 'PillowWriter')
+        anim.save(name)
+        return
 
     def show(self):
         grid = self.spins.reshape(self.width, self.width)
@@ -83,7 +75,4 @@ class lattice():
         plt.show()
 
 sample = lattice(width = 128)
-for _ in range(100):
-    sample.show()
-    sample.poke()
-sample.show()
+sample.make_animation()
