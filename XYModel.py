@@ -24,7 +24,7 @@ class lattice():
         plt.colorbar(self.im, ticks=[0, pi, 2*pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
         plt.axis('off')
 
-    def poke(self): # tries a random new spin for each lattice site, in a random order of sites
+    def poke(self):
         beta = 1 / self.temperature
         sites = list(range(len(self.spins)))
         np.random.shuffle(sites)
@@ -37,7 +37,7 @@ class lattice():
             if newEnergy <= oldEnergy or np.random.rand() < np.exp(-(newEnergy - oldEnergy) * beta):
                 self.spins[site] = newSpin
 
-    def get_energy(self):
+    def get_energy(self): # currently unused, but can be used later to see how energy changes as system equilibrates
         energy = np.zeros(np.shape(self.spins))
         for site in range(len(self.spins)):
             energy[site] = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site]) \
@@ -52,15 +52,12 @@ class lattice():
 
     def make_animation(self, prepend = 'lattice'):
         anim = animation.FuncAnimation(self.fig, self.animate, frames = 1000, interval = 20)
-
         name = prepend + '.gif'
         count = 0
         while os.path.exists(name):
             count += 1
             name = prepend + str(count) + '.gif'
-
         anim.save(name)
-
         return
 
     def show(self):
