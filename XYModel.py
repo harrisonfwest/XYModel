@@ -48,31 +48,42 @@ class lattice():
         # to get average energy per site of system
         return energy
 
-    def animate(self, frame):
+    def animate(self):
         for _ in range(15):
             self.poke()
         grid = self.spins.reshape(self.width, self.width)
         self.im.set_data(grid)
         return self.im
 
-    def make_animation(self):
-        anim = animation.FuncAnimation(self.fig, self.animate, repeat = True, frames = 200, interval = 50)
+    def make_animation(self, duration = 8, prepend = 'lattice'):
+        anim = animation.FuncAnimation(self.fig, self.animate, frames = duration * 25, interval = 40)
+        video = anim.to_html5_video()
 
-        prepend = 'lattice'
+        # embedding for the video
+        html = display.HTML(video)
+
+        # draw the animation
+        display.display(html)
+        plt.close()
+
+        return
+
         name = prepend + '.gif'
         count = 0
         while os.path.exists(name):
             count += 1
             name = prepend + str(count) + '.gif'
-        anim.save(name)
-        return
+        anim.save(name, writer = 'PillowWriter')
 
     def show(self):
         grid = self.spins.reshape(self.width, self.width)
-        plot = plt.imshow(grid, cmap = 'twilight_shifted', vmin = 0, vmax = 2*np.pi)
-        plt.colorbar(plot, label = 'Spin angle').ax.set_yticks([0, np.pi, 2* np.pi], ['0', '$\pi$', '2$\pi$'])
+        plot = plt.imshow(grid, cmap = 'twilight', vmin = 0, vmax = 2*np.pi)
+        plt.colorbar(plot, label = '$\heta$').ax.set_yticks([0, np.pi, 2* np.pi], ['0', '$\pi$', '2$\pi$'])
         plt.axis('off')
         plt.show()
 
 sample = lattice(width = 128)
-sample.make_animation()
+for _ in range(100):
+    sample.show()
+    sample.poke()
+sample.show()
