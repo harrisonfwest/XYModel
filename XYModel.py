@@ -58,7 +58,7 @@ class lattice():
         return self.im
 
     def make_animation(self, prepend = 'lattice'):
-        anim = animation.FuncAnimation(self.fig, self.animate)
+        anim = animation.FuncAnimation(self.fig, self.animate, frames = 1000, interval = 20)
 
         # video = anim.to_html5_video()
         #
