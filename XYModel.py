@@ -7,7 +7,6 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import animation
-from IPython.display import display
 
 class lattice():
     def __init__(self, temperature = .01, width = 64, external_field = 0.0):
@@ -44,12 +43,6 @@ class lattice():
                            - self.h * np.cos(self.spins[site])
         return energy
 
-    '''
-    def animate(self):
-        grid = self.spins.reshape(self.width, self.width)
-        self.im = plt.imshow(grid, cmap = 'twilight_shifted', vmin = -np.pi, vmax = +np.pi)
-    '''
-
     def animate(self, frame):
         for _ in range(15):
             self.poke()
@@ -59,14 +52,6 @@ class lattice():
 
     def make_animation(self, prepend = 'lattice'):
         anim = animation.FuncAnimation(self.fig, self.animate, frames = 1000, interval = 20)
-
-        # video = anim.to_html5_video()
-        #
-        # # embedding for the video
-        # html = display.HTML(video)
-        #
-        # # draw the animation
-        # display.display(html)
 
         name = prepend + '.gif'
         count = 0
@@ -81,10 +66,8 @@ class lattice():
     def show(self):
         grid = self.spins.reshape(self.width, self.width)
         plt.imshow(grid, cmap = 'twilight_shifted', vmin = 0, vmax = 2*np.pi)
-        # plt.colorbar(ticks=[-np.pi + .1, 0, np.pi - .1]).ax.set_yticklabels(['-$\pi$', 0, '$\pi$'])
         plt.axis('off')
         plt.show()
 
 sample = lattice(width = 512)
 sample.make_animation()
-# sample.make_animation(prepend = 'lattice')
