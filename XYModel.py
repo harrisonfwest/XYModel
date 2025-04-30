@@ -67,5 +67,5 @@ class lattice():
         return
 
 for _ in range(5):
-    sample = lattice(width = 128)
+    sample = lattice(width = 32)
     sample.make_animation()
