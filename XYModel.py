@@ -22,13 +22,14 @@ class lattice():
 
         self.fig, self.ax = plt.subplots()
         self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight',
-                             vmin = 0, vmax = 2*pi)
+                             vmin = 0, vmax = 2*pi,
+                             interpolation = 'nearest')
         plt.colorbar(self.im, ticks=[0, pi, 2*pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
         plt.axis('off')
 
     def show(self) -> None:
         grid = self.spins.reshape(self.width, self.width)
-        plt.imshow(grid, cmap = 'twilight', vmin = 0, vmax = 2*pi)
+        plt.imshow(grid, cmap = 'twilight', vmin = 0, vmax = 2*pi, interpolation = 'nearest')
         plt.axis('off')
         plt.show(block = False)
         #TODO: The colorbar appears the first time this function is called, and in the gifs created by the later
@@ -57,7 +58,7 @@ class lattice():
     def animate(self, frame):
         self.poke()
         grid = self.spins.reshape(self.width, self.width)
-        self.im.set_data(grid)
+        self.im = plt.imshow(grid, interpolation = 'nearest')
         return self.im
 
     def make_animation(self, prepend : str = 'lattice') -> None:
@@ -70,8 +71,11 @@ class lattice():
         anim.save('gifs/' + name)
         return
 
-sample = lattice(width = 128)
+sample = lattice(width = 256)
 # sample.show()
 # sample.poke()
+# sample.show()
+# for _ in range(100):
+#     sample.poke()
 # sample.show()
 sample.make_animation()
