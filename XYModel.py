@@ -63,5 +63,5 @@ class lattice():
         anim.save('gifs/' + name)
         return
 
-sample = lattice(width = 64)
+sample = lattice(width = 128)
 sample.make_animation()
