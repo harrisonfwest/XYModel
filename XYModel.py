@@ -71,7 +71,7 @@ class lattice():
         anim.save('gifs/' + name)
         return
 
-sample = lattice(width = 256)
+sample = lattice(width = 128)
 # sample.show()
 # sample.poke()
 # sample.show()
