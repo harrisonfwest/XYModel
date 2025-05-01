@@ -19,14 +19,14 @@ class lattice():
         self.spins = np.random.uniform(0, 2*pi, self.size)
         self.temperature = temperature
         self.fig = plt.figure()
-        self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight',
+        self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight_shifted',
                              vmin = 0, vmax = 2*pi)
-        plt.colorbar(self.im, ticks=[0, pi, 2*pi], extend = 'both').ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
         plt.axis('off')
 
     def show(self) -> None:
-        grid = self.spins.reshape(self.width, self.width)
-        plt.imshow(grid, cmap = 'twilight_shifted', vmin = 0, vmax = 2*pi)
+        self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap='twilight_shifted',
+                             vmin=0, vmax=2 * pi)
+        self.fig.colorbar(self.im, ticks=[0, pi, 2*pi], extend = 'both').ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
         plt.axis('off')
         plt.show()
         return
@@ -54,8 +54,12 @@ class lattice():
 
     def animate(self, frame):
         self.poke()
-        self.im.set_data(self.spins.reshape(self.width, self.width))
-        return self.im
+        self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap='twilight_shifted',
+                             vmin=0, vmax=2 * pi)
+        self.fig.colorbar(self.im, ticks=[0, pi, 2 * pi], extend='both').ax.set_yticklabels([0, '$\pi$', '2$\pi$'],
+                                                                                            label='Spin angle')
+        plt.axis('off')
+        return self.fig
 
     def make_animation(self, prepend : str = 'lattice') -> None:
         anim = animation.FuncAnimation(self.fig, self.animate, frames = 1000, interval = 20)
@@ -67,5 +71,5 @@ class lattice():
         anim.save('gifs/' + name)
         return
 
-sample = lattice(width = 128)
+sample = lattice(width = 32)
 sample.make_animation()
