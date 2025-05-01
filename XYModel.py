@@ -71,4 +71,4 @@ sample = lattice(width = 128, external_field = 1)
 sample.make_animation()
 
 sample2 = lattice(width = 128, external_field = -1)
-sample2.make_animation
+sample2.make_animation()
