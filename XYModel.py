@@ -21,14 +21,14 @@ class lattice():
         self.temperature = temperature
 
         self.fig, self.ax = plt.subplots()
-        self.ax = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight',
+        self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight',
                              vmin = 0, vmax = 2*pi)
-        self.fig.colorbar(self.ax, ticks=[0, pi, 2*pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
+        plt.colorbar(self.im, ticks=[0, pi, 2*pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
         plt.axis('off')
 
     def show(self) -> None:
         grid = self.spins.reshape(self.width, self.width)
-        self.ax = plt.imshow(grid, cmap = 'twilight', vmin = 0, vmax = 2*pi)
+        plt.imshow(grid, cmap = 'twilight', vmin = 0, vmax = 2*pi)
         plt.axis('off')
         plt.show(block = False)
         #TODO: The colorbar appears the first time this function is called, and in the gifs created by the later
@@ -57,8 +57,8 @@ class lattice():
     def animate(self, frame):
         self.poke()
         grid = self.spins.reshape(self.width, self.width)
-        self.ax.set_data(grid)
-        return self.ax
+        self.im.set_data(grid)
+        return self.im
 
     def make_animation(self, prepend : str = 'lattice') -> None:
         anim = animation.FuncAnimation(self.fig, self.animate, frames = 1000, interval = 20)
@@ -71,7 +71,7 @@ class lattice():
         return
 
 sample = lattice(width = 128)
-sample.show()
-sample.poke()
-sample.show()
-# sample.make_animation()
+# sample.show()
+# sample.poke()
+# sample.show()
+sample.make_animation()
