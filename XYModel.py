@@ -11,7 +11,7 @@ from matplotlib import animation
 pi = np.pi
 
 class lattice():
-    def __init__(self, temperature : float = .01, width : int = 64, external_field : float = 0.0) -> None:
+    def __init__(self, temperature : float = .01, width : int = 128, external_field : float = 0.0) -> None:
         self.width = width
         self.size = self.width * self.width
         self.h = external_field
@@ -24,7 +24,8 @@ class lattice():
         self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight',
                              vmin = 0, vmax = 2*pi,
                              interpolation = 'nearest')
-        plt.colorbar(self.im, ticks=[0, pi, 2*pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
+        plt.title('XY Lattice: T = %.3f, h = %.3f' % (temperature, external_field))
+        plt.colorbar(self.im, ticks=[0, pi, 2*pi], label = 'Spin angle').ax.set_yticklabels([0, '$\pi$', '2$\pi$'])
         plt.axis('off')
 
     def poke(self) -> None:
@@ -54,7 +55,7 @@ class lattice():
         return self.im
 
     def make_animation(self, prepend : str = 'lattice') -> None:
-        anim = animation.FuncAnimation(self.fig, self.animate, frames = 1000, interval = 20)
+        anim = animation.FuncAnimation(self.fig, self.animate, frames = 100, interval = 50)
         name = prepend + '.gif'
         count = 0
         while os.path.exists('gifs/' + name):
@@ -66,5 +67,8 @@ class lattice():
     ### TODO: previously there was a show() function, but calling it would prevent make_animation from
     ### working correctly. Could be worth re-creating but not a necessary feature.
 
-sample = lattice(width = 128)
+sample = lattice(width = 128, external_field = 1)
 sample.make_animation()
+
+sample2 = lattice(width = 128, external_field = -1)
+sample2.make_animation
