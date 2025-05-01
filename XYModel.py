@@ -62,6 +62,9 @@ class lattice():
             name = prepend + str(count) + '.gif'
         anim.save('gifs/' + name)
         return
+    
+    ### TODO: previously there was a show() function, but calling it would prevent make_animation from
+    ### working correctly. Could be worth re-creating but not a necessary feature.
 
 sample = lattice(width = 128)
 sample.make_animation()
