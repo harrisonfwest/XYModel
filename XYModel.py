@@ -29,6 +29,8 @@ class lattice():
         plt.imshow(grid, cmap = 'twilight', vmin = 0, vmax = 2*pi)
         plt.axis('off')
         plt.show()
+        #TODO: The colorbar appears the first time this function is called, and in the gifs created by the later
+        # functions, but not for successive show() calls after the first one. Worth fixing but not high priority
         return
 
     def poke(self) -> None:
@@ -67,4 +69,7 @@ class lattice():
         return
 
 sample = lattice(width = 128)
-sample.make_animation()
+sample.show()
+sample.poke()
+sample.show()
+# sample.make_animation()
