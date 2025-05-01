@@ -26,15 +26,7 @@ class lattice():
                              interpolation = 'nearest')
         plt.colorbar(self.im, ticks=[0, pi, 2*pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
         plt.axis('off')
-
-    def show(self) -> None:
-        grid = self.spins.reshape(self.width, self.width)
-        plt.imshow(grid, cmap = 'twilight', vmin = 0, vmax = 2*pi, interpolation = 'nearest')
-        plt.axis('off')
-        plt.show(block = False)
-        #TODO: The colorbar appears the first time this function is called, and in the gifs created by the later
-        # functions, but not for successive show() calls after the first one. Worth fixing but not high priority
-        return
+        plt.show()
 
     def poke(self) -> None:
         beta = 1 / self.temperature
@@ -46,6 +38,7 @@ class lattice():
             newEnergy = -sum(np.cos(newSpin - self.spins[n]) for n in self.neighbors[site]) - self.h * np.cos(self.spins[site])
             if newEnergy <= oldEnergy or np.random.rand() < np.exp(-(newEnergy - oldEnergy) * beta):
                 self.spins[site] = newSpin
+        self.fig.canvas.draw()
         return
 
     def get_energy(self) -> np.array: # currently unused, but can be used later to see how energy changes as system equilibrates
@@ -72,10 +65,5 @@ class lattice():
         return
 
 sample = lattice(width = 128)
-sample.show()
-# sample.poke()
-# sample.show()
-# for _ in range(100):
-#     sample.poke()
-# sample.show()
-# sample.make_animation()
+for _ in range(10):
+    sample.poke()
