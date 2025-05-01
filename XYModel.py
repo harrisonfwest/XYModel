@@ -6,7 +6,7 @@ Created on Sun Apr 20, 2025 @ 4:09 pm
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import animation
+from matplotlib.animation import FuncAnimation
 
 pi = np.pi
 
@@ -20,13 +20,13 @@ class lattice():
         self.spins = np.random.uniform(0, 2*pi, self.size)
         self.temperature = temperature
 
-        self.fig, self.ax = plt.subplots()
-        self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight',
+        self.fig, self.axis = plt.subplots()
+        self.animated_plot = self.axis.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight',
                              vmin = 0, vmax = 2*pi,
                              interpolation = 'nearest')
-        plt.colorbar(self.im, ticks=[0, pi, 2*pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
+        self.fig.colorbar(self.animated_plot, ticks=[0, pi, 2*pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
         plt.axis('off')
-        plt.show()
+        plt.ion()
 
     def poke(self) -> None:
         beta = 1 / self.temperature
@@ -38,7 +38,6 @@ class lattice():
             newEnergy = -sum(np.cos(newSpin - self.spins[n]) for n in self.neighbors[site]) - self.h * np.cos(self.spins[site])
             if newEnergy <= oldEnergy or np.random.rand() < np.exp(-(newEnergy - oldEnergy) * beta):
                 self.spins[site] = newSpin
-        self.fig.canvas.draw()
         return
 
     def get_energy(self) -> np.array: # currently unused, but can be used later to see how energy changes as system equilibrates
@@ -48,22 +47,17 @@ class lattice():
                            - self.h * np.cos(self.spins[site])
         return energy
 
-    def animate(self, frame):
+    def update_data(self, frame):
         self.poke()
-        grid = self.spins.reshape(self.width, self.width)
-        self.im = plt.imshow(grid, interpolation = 'nearest')
-        return self.im
-
-    def make_animation(self, prepend : str = 'lattice') -> None:
-        anim = animation.FuncAnimation(self.fig, self.animate, frames = 1000, interval = 20)
-        name = prepend + '.gif'
-        count = 0
-        while os.path.exists('gifs/' + name):
-            count += 1
-            name = prepend + str(count) + '.gif'
-        anim.save('gifs/' + name)
-        return
+        self.animated_plot.update_data(self.spins.reshape(self.width, self.width))
+        return self.animated_plot,
+    
+    def show(self) -> None:
+        animation = FuncAnimation(fig = self.fig,
+                                  func = self.update_data,
+                                  frames = len(np.linspace(0, 10, 100)),
+                                  interval = 25)  
+        plt.show()     
 
 sample = lattice(width = 128)
-for _ in range(10):
-    sample.poke()
+sample.show()
