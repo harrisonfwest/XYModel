@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 
 pi = np.pi
+
 class lattice():
     def __init__(self, temperature : float = .01, width : int = 64, external_field : float = 0.0) -> None:
         self.width = width
@@ -18,17 +19,18 @@ class lattice():
         self.neighbors = {i : ((i//L)*L + (i+1)%L, (i+L)%N, (i//L)*L + (i-1)%L, (i-L)%N) for i in list(range(N))}
         self.spins = np.random.uniform(0, 2*pi, self.size)
         self.temperature = temperature
-        self.fig = plt.figure()
-        self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight',
+
+        self.fig, self.ax = plt.subplots()
+        self.ax = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight',
                              vmin = 0, vmax = 2*pi)
-        plt.colorbar(self.im, ticks=[0, pi, 2*pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
+        self.fig.colorbar(self.ax, ticks=[0, pi, 2*pi]).ax.set_yticklabels([0, '$\pi$', '2$\pi$'], label = 'Spin angle')
         plt.axis('off')
 
     def show(self) -> None:
         grid = self.spins.reshape(self.width, self.width)
-        plt.imshow(grid, cmap = 'twilight', vmin = 0, vmax = 2*pi)
+        self.ax = plt.imshow(grid, cmap = 'twilight', vmin = 0, vmax = 2*pi)
         plt.axis('off')
-        plt.show()
+        plt.show(block = False)
         #TODO: The colorbar appears the first time this function is called, and in the gifs created by the later
         # functions, but not for successive show() calls after the first one. Worth fixing but not high priority
         return
@@ -55,8 +57,8 @@ class lattice():
     def animate(self, frame):
         self.poke()
         grid = self.spins.reshape(self.width, self.width)
-        self.im.set_data(grid)
-        return self.im
+        self.ax.set_data(grid)
+        return self.ax
 
     def make_animation(self, prepend : str = 'lattice') -> None:
         anim = animation.FuncAnimation(self.fig, self.animate, frames = 1000, interval = 20)
