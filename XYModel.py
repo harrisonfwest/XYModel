@@ -67,7 +67,4 @@ class lattice():
         return
 
 sample = lattice(width = 128)
-sample.show()
-sample.poke()
-sample.show()
-# sample.make_animation()
+sample.make_animation()
