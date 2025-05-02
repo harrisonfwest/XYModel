@@ -36,7 +36,7 @@ class lattice():
         for site in sites:
             oldEnergy = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site]) - (self.h * np.cos(self.spins[site]))
             newSpin = (self.spins[site] + np.random.uniform(0, 2*pi)) % (2 * pi)
-            newEnergy = -sum(np.cos(newSpin          - self.spins[n]) for n in self.neighbors[site]) - (self.h * np.cos(self.spins[site]))
+            newEnergy = -sum(np.cos(newSpin          - self.spins[n]) for n in self.neighbors[site]) - (self.h * np.cos(newSpin))
             if newEnergy <= oldEnergy or np.random.rand() < np.exp(-(newEnergy - oldEnergy) * beta):
                 self.spins[site] = newSpin
         self.fig.canvas.draw()
@@ -65,12 +65,18 @@ class lattice():
         anim.save('gifs/' + name)
         return
     
+    def copy(self): # primary purpose is to copy the spin structure
+        copy = lattice(teperature = self.temperature, width = self.width, external_field = self.h)
+        copy.spins = self.spins
+        return copy
+    
     ### TODO: previously there was a show() function, but calling it would prevent make_animation() from
     ### working correctly. Could be worth re-creating but not a necessary feature as long as make_animation() works
-    ### The only flaw is that make_animation takes much longer than simply showing
+    ### Note that make_animation takes much longer than simply showing would, but it produces and saves a full gif
+    ### showing the system's evolution instead of a still image
 
-sample = lattice(width = 128, external_field = 100)
+sample = lattice(width = 64, external_field = .05)
 sample.make_animation()
 
-sample2 = lattice(width = 128, external_field = -100)
+sample2 = lattice(width = 64, external_field = -.05)
 sample2.make_animation()
