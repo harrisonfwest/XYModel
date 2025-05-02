@@ -12,6 +12,7 @@ pi = np.pi
 
 class lattice():
     def __init__(self, temperature : float = .01, width : int = 128, external_field : float = 0.0) -> None:
+        # Assumes coupling constant J = 1
         self.width = width
         self.size = self.width * self.width
         self.h = external_field
@@ -24,7 +25,7 @@ class lattice():
         self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight',
                              vmin = 0, vmax = 2*pi,
                              interpolation = 'nearest')
-        plt.title('XY Lattice: T = %.3f, h = %.3f' % (temperature, external_field))
+        plt.title('XY Lattice: T = %.2f, h = %.2f' % (temperature, external_field))
         plt.colorbar(self.im, ticks=[0, pi, 2*pi], label = 'Spin angle').ax.set_yticklabels([0, '$\pi$', '2$\pi$'])
         plt.axis('off')
 
@@ -64,11 +65,12 @@ class lattice():
         anim.save('gifs/' + name)
         return
     
-    ### TODO: previously there was a show() function, but calling it would prevent make_animation from
-    ### working correctly. Could be worth re-creating but not a necessary feature.
+    ### TODO: previously there was a show() function, but calling it would prevent make_animation() from
+    ### working correctly. Could be worth re-creating but not a necessary feature as long as make_animation() works
+    ### The only flaw is that make_animation takes much longer than simply showing
 
-sample = lattice(width = 128, external_field = 1)
+sample = lattice(width = 128, external_field = 100)
 sample.make_animation()
 
-sample2 = lattice(width = 128, external_field = -1)
+sample2 = lattice(width = 128, external_field = -100)
 sample2.make_animation()
