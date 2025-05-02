@@ -34,9 +34,9 @@ class lattice():
         sites = list(range(len(self.spins)))
         np.random.shuffle(sites)
         for site in sites:
-            oldEnergy = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site]) - self.h * np.cos(self.spins[site])
+            oldEnergy = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site]) - (self.h * np.cos(self.spins[site]))
             newSpin = (self.spins[site] + np.random.uniform(0, 2*pi)) % (2 * pi)
-            newEnergy = -sum(np.cos(newSpin - self.spins[n]) for n in self.neighbors[site]) - self.h * np.cos(self.spins[site])
+            newEnergy = -sum(np.cos(newSpin          - self.spins[n]) for n in self.neighbors[site]) - (self.h * np.cos(self.spins[site]))
             if newEnergy <= oldEnergy or np.random.rand() < np.exp(-(newEnergy - oldEnergy) * beta):
                 self.spins[site] = newSpin
         self.fig.canvas.draw()
@@ -46,7 +46,7 @@ class lattice():
         energy = np.zeros(np.shape(self.spins))
         for site in range(len(self.spins)):
             energy[site] = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site]) \
-                           - self.h * np.cos(self.spins[site])
+                           - (self.h * np.cos(self.spins[site]))
         return energy
 
     def animate(self, frame):
