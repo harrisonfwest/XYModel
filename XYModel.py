@@ -79,6 +79,8 @@ class lattice():
             count += 1
             name = prepend + str(count) + '.gif'
         anim.save('gifs/' + name)
+        # TODO: save image of final frame of the animation
+        # plt.savefig('stills/' + prepend + str(count) + '.png')
         return
     
     def copy(self): # primary purpose is to copy the spin structure
@@ -91,10 +93,5 @@ class lattice():
     ### Note that make_animation takes much longer than simply showing would, but it produces and saves a full gif
     ### showing the system's evolution instead of a still image
 
-sample = lattice(width = 128, temperature = 0.8)
-initial_grid = np.copy(sample.spins)
+sample = lattice(width = 128, temperature = 15)
 sample.make_animation()
-
-sample2 = lattice(width = 128, temperature = 0.95)
-sample2.spins = initial_grid
-sample2.make_animation()
