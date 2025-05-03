@@ -48,6 +48,22 @@ class lattice():
             energy[site] = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site]) \
                            - (self.h * np.cos(self.spins[site]))
         return energy
+    
+    def get_magnetization(self):
+        mag = np.sum(np.cos(self.spins))
+        return mag/self.size
+    
+    def plot_magnetization(self): # Plot mean magnetization of an initial system over time
+        mags = []
+        for _ in range(200):
+            mags.append(self.get_magnetization)
+            self.poke()
+        fig = plt.figure()
+        fig.plot(range(200), mags)
+        fig.title('Mean magnetization of system with width %i, h = %.4f, T = %.4f' % (self.width, self.h, self.temperature))
+        fig.xlabel('Time step')
+        fig.ylabel('Mean magnetization')
+        fig.show()
 
     def animate(self, frame):
         self.poke()
@@ -56,7 +72,7 @@ class lattice():
         return self.im
 
     def make_animation(self, prepend : str = 'lattice') -> None:
-        anim = animation.FuncAnimation(self.fig, self.animate, frames = 100, interval = 50)
+        anim = animation.FuncAnimation(self.fig, self.animate, frames = 200, interval = 100)
         name = prepend + '.gif'
         count = 0
         while os.path.exists('gifs/' + name):
@@ -75,14 +91,14 @@ class lattice():
     ### Note that make_animation takes much longer than simply showing would, but it produces and saves a full gif
     ### showing the system's evolution instead of a still image
 
-sample = lattice(width = 64, temperature= .75)
-sample.make_animation()
+sample = lattice(width = 128, temperature= .75)
+sample.plot_magnetization()
 
-sample2 = lattice(width = 64, temperature = 0.8)
-sample2.make_animation()
+sample2 = lattice(width = 128, temperature = 0.8)
+sample2.plot_magnetization()
 
-sample3 = lattice(width = 64, temperature = 0.8816)
-sample3.make_animation()
+sample3 = lattice(width = 128, temperature = 0.8816)
+sample3.plot_magnetization()
 
-sample4 = lattice(width = 64, temperature = 0.95)
-sample4.make_animation()
+sample4 = lattice(width = 128, temperature = 0.95)
+sample4.plot_magnetization()
