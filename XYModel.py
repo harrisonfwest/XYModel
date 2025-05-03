@@ -82,8 +82,8 @@ class lattice():
         return
     
     def copy(self): # primary purpose is to copy the spin structure
-        copy = lattice(teperature = self.temperature, width = self.width, external_field = self.h)
-        copy.spins = self.spins
+        copy = lattice(temperature = self.temperature, width = self.width, external_field = self.h)
+        copy.spins = np.copy(self.spins)
         return copy
     
     ### TODO: previously there was a show() function, but calling it would prevent make_animation() from
@@ -91,14 +91,10 @@ class lattice():
     ### Note that make_animation takes much longer than simply showing would, but it produces and saves a full gif
     ### showing the system's evolution instead of a still image
 
-sample = lattice(width = 128, temperature= .75)
-sample.plot_magnetization()
+sample = lattice(width = 128, temperature = 0.8)
+initial_grid = np.copy(sample.spins)
+sample.make_animation()
 
-sample2 = lattice(width = 128, temperature = 0.8)
-sample2.plot_magnetization()
-
-sample3 = lattice(width = 128, temperature = 0.8816)
-sample3.plot_magnetization()
-
-sample4 = lattice(width = 128, temperature = 0.95)
-sample4.plot_magnetization()
+sample2 = lattice(width = 128, temperature = 0.95)
+sample2.spins = initial_grid
+sample2.make_animation()
