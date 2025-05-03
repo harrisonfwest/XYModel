@@ -25,7 +25,7 @@ class lattice():
         self.im = plt.imshow(self.spins.reshape(self.width, self.width), cmap = 'twilight',
                              vmin = 0, vmax = 2*pi,
                              interpolation = 'nearest')
-        plt.title('XY Lattice: T = %.2f, h = %.2f' % (temperature, external_field))
+        plt.title('XY Lattice: T = %.4f, h = %.4f' % (temperature, external_field))
         plt.colorbar(self.im, ticks=[0, pi, 2*pi], label = 'Spin angle').ax.set_yticklabels([0, '$\pi$', '2$\pi$'])
         plt.axis('off')
 
@@ -75,8 +75,14 @@ class lattice():
     ### Note that make_animation takes much longer than simply showing would, but it produces and saves a full gif
     ### showing the system's evolution instead of a still image
 
-sample = lattice(width = 64, external_field = .05)
+sample = lattice(width = 64, temperature= .75)
 sample.make_animation()
 
-sample2 = lattice(width = 64, external_field = -.05)
+sample2 = lattice(width = 64, temperature = 0.8)
 sample2.make_animation()
+
+sample3 = lattice(width = 64, temperature = 0.8816)
+sample3.make_animation()
+
+sample4 = lattice(width = 64, temperature = 0.95)
+sample4.make_animation()
