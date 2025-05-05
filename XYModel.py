@@ -127,7 +127,9 @@ mean_mags = np.empty(shape = (len(temperature_range), len(x_vals)))
 mean_energies = np.empty(shape = (len(temperature_range), len(x_vals)))
 for i in range(len(temperature_range)):
     mag_lattice = lattice(temperature = temperature_range[i])
+    plt.clf()
     en_lattice = lattice(temperature = temperature_range[i])
+    plt.clf()
     
     for j in range(len(x_vals)):
         mean_mags[i, j]     = mag_lattice.get_magnetization()
@@ -135,12 +137,14 @@ for i in range(len(temperature_range)):
         mag_lattice.poke()
         en_lattice.poke()
 
+plt.clf()
 for i in range(len(temperature_range)):
     plt.plot(x_vals, mean_mags[i], label = 'T = %.2f' % temperature_range[i])
 plt.legend()
 plt.title('Mean Magnetizations (Width = 128)')
 plt.savefig('stills/mean_mag_collection.png')
 
+plt.clf()
 for i in range(len(temperature_range)):
     plt.plot(x_vals, mean_energies[i], label = 'T = %.2f' % temperature_range[i])
 plt.legend()
