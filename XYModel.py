@@ -49,21 +49,49 @@ class lattice():
                            - (self.h * np.cos(self.spins[site]))
         return energy
     
+    def plot_energy(self) -> None:
+        energies = []
+        x_vals = np.arange(1, 750)
+        for _ in x_vals:
+            energies.append(np.sum(self.get_energy())/self.size)
+            self.poke()
+        plt.clf()
+        plt.plot(x_vals, energies)
+        plt.title('Mean energy of system with width %i, h = %.4f, T = %.4f' % (self.width, self.h, self.temperature))
+        plt.xlabel('Time step')
+        plt.ylabel('Mean energy')
+        plt.show()
+        name = 'stills/mean_energy.png'
+        count = 0
+        while os.path.exists('stills/' + name + '.png'):
+            count += 1
+            name = 'stills/mean_energy' + str(count) + '.png'
+        plt.savefig(name)
+        return None
+    
     def get_magnetization(self):
         mag = np.sum(np.cos(self.spins))
         return mag/self.size
     
-    def plot_magnetization(self): # Plot mean magnetization of an initial system over time
+    def plot_magnetization(self) -> None: # Plot mean magnetization of an initial system over time
         mags = []
-        for _ in range(200):
-            mags.append(self.get_magnetization)
+        x_vals = np.arange(1, 750)
+        for _ in x_vals:
+            mags.append(self.get_magnetization())
             self.poke()
-        fig = plt.figure()
-        fig.plot(range(200), mags)
-        fig.title('Mean magnetization of system with width %i, h = %.4f, T = %.4f' % (self.width, self.h, self.temperature))
-        fig.xlabel('Time step')
-        fig.ylabel('Mean magnetization')
-        fig.show()
+        plt.clf()
+        plt.plot(x_vals, mags)
+        plt.title('Mean magnetization of system with width %i, h = %.4f, T = %.4f' % (self.width, self.h, self.temperature))
+        plt.xlabel('Time step')
+        plt.ylabel('Mean magnetization')
+        
+        name = 'stills/mean_mag.png'
+        count = 0
+        while os.path.exists('stills/' + name + '.png'):
+            count += 1
+            name = 'stills/mean_mag' + str(count) + '.png'
+        plt.savefig(name)
+        return None
 
     def animate(self, frame):
         self.poke()
@@ -93,5 +121,14 @@ class lattice():
     ### Note that make_animation takes much longer than simply showing would, but it produces and saves a full gif
     ### showing the system's evolution instead of a still image
 
-sample = lattice(width = 128, temperature = 15)
-sample.make_animation()
+sample = lattice()
+sample.plot_magnetization()
+
+sample2 = lattice(temperature = 2)
+sample2.plot_magnetization()
+
+sample3 = lattice()
+sample3.plot_energy()
+
+sample4 = lattice(temperature = 2)
+sample4.plot_energy()
