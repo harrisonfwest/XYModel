@@ -120,26 +120,29 @@ class lattice():
     ### Note that make_animation takes much longer than simply showing would, but it produces and saves a full gif
     ### showing the system's evolution instead of a still image
 
-sample = lattice(temperature = 1)
-sample.plot_magnetization()
+plt.clf()
+temperature_range = [0.01, 0.1, 0.5, 0.75, 0.88, 0.9, 1, 3, 5, 10]
+x_vals = np.arange(1, 750)
+mean_mags = np.empty(shape = (len(temperature_range), len(x_vals)))
+mean_energies = np.empty(shape = (len(temperature_range), len(x_vals)))
+for i in range(len(temperature_range)):
+    mag_lattice = lattice(temperature = temperature_range[i])
+    en_lattice = lattice(temperature = temperature_range[i])
+    
+    for j in range(len(x_vals)):
+        mean_mags[i, j]     = mag_lattice.get_magnetization()
+        mean_energies[i, j] = en_lattice.get_magnetization()
+        mag_lattice.poke()
+        en_lattice.poke()
 
-sample2 = lattice(temperature = 1)
-sample2.plot_energy()
+for i in range(len(temperature_range)):
+    plt.plot(x_vals, mean_mags[i], label = 'T = %.2f' % temperature_range[i])
+plt.legend()
+plt.title('Mean Magnetizations (Width = 128)')
+plt.savefig('stills/mean_mag_collection.png')
 
-sample3 = lattice(temperature = 1.5)
-sample3.plot_magnetization()
-
-sample4 = lattice(temperature = 1.5)
-sample4.plot_energy()
-
-sample5 = lattice(temperature = 3)
-sample5.plot_magnetization()
-
-sample6 = lattice(temperature = 3)
-sample6.plot_energy()
-
-sample7 = lattice(temperature = 10)
-sample7.plot_magnetization()
-
-sample8 = lattice(temperature = 10)
-sample8.plot_energy()
+for i in range(len(temperature_range)):
+    plt.plot(x_vals, mean_energies[i], label = 'T = %.2f' % temperature_range[i])
+plt.legend()
+plt.title('Mean Energies (Width = 128)')
+plt.savefig('stills/mean_en_collection.png')
