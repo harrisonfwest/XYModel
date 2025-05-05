@@ -60,10 +60,9 @@ class lattice():
         plt.title('Mean energy of system with width %i, h = %.4f, T = %.4f' % (self.width, self.h, self.temperature))
         plt.xlabel('Time step')
         plt.ylabel('Mean energy')
-        plt.show()
         name = 'stills/mean_energy.png'
         count = 0
-        while os.path.exists('stills/' + name + '.png'):
+        while os.path.exists(name):
             count += 1
             name = 'stills/mean_energy' + str(count) + '.png'
         plt.savefig(name)
@@ -87,7 +86,7 @@ class lattice():
         
         name = 'stills/mean_mag.png'
         count = 0
-        while os.path.exists('stills/' + name + '.png'):
+        while os.path.exists(name):
             count += 1
             name = 'stills/mean_mag' + str(count) + '.png'
         plt.savefig(name)
@@ -121,14 +120,26 @@ class lattice():
     ### Note that make_animation takes much longer than simply showing would, but it produces and saves a full gif
     ### showing the system's evolution instead of a still image
 
-sample = lattice()
+sample = lattice(temperature = 1)
 sample.plot_magnetization()
 
-sample2 = lattice(temperature = 2)
-sample2.plot_magnetization()
+sample2 = lattice(temperature = 1)
+sample2.plot_energy()
 
-sample3 = lattice()
-sample3.plot_energy()
+sample3 = lattice(temperature = 1.5)
+sample3.plot_magnetization()
 
-sample4 = lattice(temperature = 2)
+sample4 = lattice(temperature = 1.5)
 sample4.plot_energy()
+
+sample5 = lattice(temperature = 3)
+sample5.plot_magnetization()
+
+sample6 = lattice(temperature = 3)
+sample6.plot_energy()
+
+sample7 = lattice(temperature = 10)
+sample7.plot_magnetization()
+
+sample8 = lattice(temperature = 10)
+sample8.plot_energy()
