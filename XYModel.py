@@ -120,33 +120,28 @@ class lattice():
     ### Note that make_animation takes much longer than simply showing would, but it produces and saves a full gif
     ### showing the system's evolution instead of a still image
 
-plt.clf()
-temperature_range = [0.01, 0.1, 0.5, 0.75, 0.88, 0.9, 1, 3, 5, 10]
+plt.close()
+temperature_range = [0.01, 0.1, 1, 3, 10]
 x_vals = np.arange(1, 750)
-mean_mags = np.empty(shape = (len(temperature_range), len(x_vals)))
-mean_energies = np.empty(shape = (len(temperature_range), len(x_vals)))
+mean_mags = np.empty(shape = (len(temperature_range), len(x_vals), 20))
 for i in range(len(temperature_range)):
-    mag_lattice = lattice(temperature = temperature_range[i])
-    plt.clf()
-    en_lattice = lattice(temperature = temperature_range[i])
-    plt.clf()
-    
+    for k in range(20):
+        mag_lattice = lattice(temperature = temperature_range[i])
+        plt.close()
+        for j in range(len(x_vals)):
+            mean_mags[i, j, k] = mag_lattice.get_magnetization()
+            mag_lattice.poke()
+
+# mean_mags: for each temp, an array of xvals, each has 20 vals to average
+final_means = np.empty(shape = (len(temperature_range), len(x_vals)))
+for i in range(len(temperature_range)):
     for j in range(len(x_vals)):
-        mean_mags[i, j]     = mag_lattice.get_magnetization()
-        mean_energies[i, j] = np.sum(en_lattice.get_energy())/en_lattice.size
-        mag_lattice.poke()
-        en_lattice.poke()
+        final_means[i, j] = np.average(mean_mags[i, j])
 
-plt.clf()
-for i in range(len(temperature_range))[1::]:
-    plt.plot(x_vals, abs(mean_mags[i]), label = 'T = %.2f' % temperature_range[i], alpha = 0.5)
-plt.legend()
-plt.title('Absolute Values of Mean Magnetizations (Width = 128)')
-plt.savefig('stills/mean_mag_collection.png')
 
 plt.clf()
 for i in range(len(temperature_range)):
-    plt.plot(x_vals, mean_energies[i], label = 'T = %.2f' % temperature_range[i])
+    plt.plot(x_vals, abs(final_means[i]), label = 'T = %.2f' % temperature_range[i], alpha = 0.5)
 plt.legend()
-plt.title('Mean Energies (Width = 128)')
-plt.savefig('stills/mean_en_collection.png')
+plt.title('Absolute Values of Mean Magnetizations per spin (averaged over 20 systems for convergence) (Width = 128)')
+plt.savefig('stills/mean_mag_collection.png')
