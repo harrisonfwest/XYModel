@@ -122,7 +122,7 @@ class lattice():
 
 plt.close()
 temperature_range = [0.01, 0.1, 1, 3, 10]
-x_vals = np.arange(1, 750)
+x_vals = np.arange(1, 500)
 mean_mags = np.empty(shape = (len(temperature_range), len(x_vals), 20))
 for i in range(len(temperature_range)):
     for k in range(20):
