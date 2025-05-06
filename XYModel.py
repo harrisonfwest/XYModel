@@ -35,7 +35,7 @@ class lattice():
         np.random.shuffle(sites)
         for site in sites:
             oldEnergy = -sum(np.cos(self.spins[site] - self.spins[n]) for n in self.neighbors[site]) - (self.h * np.cos(self.spins[site]))
-            newSpin = (self.spins[site] + np.random.uniform(0, 2*pi)) % (2 * pi)
+            newSpin = np.random.uniform(0, 2*pi)
             newEnergy = -sum(np.cos(newSpin          - self.spins[n]) for n in self.neighbors[site]) - (self.h * np.cos(newSpin))
             if newEnergy <= oldEnergy or np.random.rand() < np.exp(-(newEnergy - oldEnergy) * beta):
                 self.spins[site] = newSpin
