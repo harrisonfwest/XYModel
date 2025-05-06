@@ -138,7 +138,7 @@ for i in range(len(temperature_range)):
         en_lattice.poke()
 
 plt.clf()
-for i in range(len(temperature_range)):
+for i in range(len(temperature_range))[1::]:
     plt.plot(x_vals, abs(mean_mags[i]), label = 'T = %.2f' % temperature_range[i], alpha = 0.5)
 plt.legend()
 plt.title('Absolute Values of Mean Magnetizations (Width = 128)')
@@ -146,7 +146,7 @@ plt.savefig('stills/mean_mag_collection.png')
 
 plt.clf()
 for i in range(len(temperature_range)):
-    plt.plot(x_vals, mean_energies[i], label = 'T = %.2f' % temperature_range[i], alpha = 0.5)
+    plt.plot(x_vals, mean_energies[i], label = 'T = %.2f' % temperature_range[i])
 plt.legend()
 plt.title('Mean Energies (Width = 128)')
 plt.savefig('stills/mean_en_collection.png')
