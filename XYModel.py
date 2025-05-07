@@ -121,27 +121,21 @@ class lattice():
     ### showing the system's evolution instead of a still image
 
 plt.close()
-temperature_range = [0.01, 0.1, 1, 3, 10]
-x_vals = np.arange(1, 500)
-mean_mags = np.empty(shape = (len(temperature_range), len(x_vals), 20))
-for i in range(len(temperature_range)):
+h_range = [0.01, 0.1, 0.5, 0.75, 1, 3, 5, 10]
+x_vals = np.arange(1, 750)
+mean_ens = np.empty(shape = (len(h_range), len(x_vals)))
+for i in range(len(h_range)):
     for k in range(20):
-        mag_lattice = lattice(temperature = temperature_range[i])
+        en_lattice = lattice(external_field= h_range[i])
         plt.close()
         for j in range(len(x_vals)):
-            mean_mags[i, j, k] = mag_lattice.get_magnetization()
-            mag_lattice.poke()
-
-# mean_mags: for each temp, an array of xvals, each has 20 vals to average
-final_means = np.empty(shape = (len(temperature_range), len(x_vals)))
-for i in range(len(temperature_range)):
-    for j in range(len(x_vals)):
-        final_means[i, j] = np.average(mean_mags[i, j])
+            mean_ens[i, j] = np.average(en_lattice.get_energy())
+            en_lattice.poke()
 
 
 plt.clf()
-for i in range(len(temperature_range)):
-    plt.plot(x_vals, abs(final_means[i]), label = 'T = %.2f' % temperature_range[i], alpha = 0.5)
+for i in range(len(h_range)):
+    plt.plot(x_vals, abs(mean_ens[i]), label = 'T = 0.01, h = %.2f' % h_range[i], alpha = 0.5)
 plt.legend()
-plt.title('Absolute Values of Mean Magnetizations per spin (averaged over 20 systems for convergence) (Width = 128)')
-plt.savefig('stills/mean_mag_collection.png')
+plt.title('Absolute Values of Mean Energy per spin (Width = 128)')
+plt.savefig('stills/mean_energies_collection2.png')
