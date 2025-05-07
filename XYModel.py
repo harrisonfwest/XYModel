@@ -137,5 +137,5 @@ plt.clf()
 for i in range(len(h_range)-4):
     plt.plot(x_vals, abs(mean_ens[i]), label = 'T = 0.01, h = %.2f' % h_range[i], alpha = 0.5)
 plt.legend()
-plt.title('Absolute Values of Mean Energy per spin (Width = 128)')
+plt.title('Mean Energy per spin (Width = 128)')
 plt.savefig('stills/mean_energies_collection3.png')
