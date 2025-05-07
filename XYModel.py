@@ -120,22 +120,5 @@ class lattice():
     ### Note that make_animation takes much longer than simply showing would, but it produces and saves a full gif
     ### showing the system's evolution instead of a still image
 
-plt.close()
-h_range = [0.01, 0.1, 0.5, 0.75, 1, 3, 5, 10]
-x_vals = np.arange(1, 750)
-mean_ens = np.empty(shape = (len(h_range), len(x_vals)))
-for i in range(len(h_range)):
-    for k in range(20):
-        en_lattice = lattice(external_field= h_range[i])
-        plt.close()
-        for j in range(len(x_vals)):
-            mean_ens[i, j] = np.average(en_lattice.get_energy())
-            en_lattice.poke()
-
-
-plt.clf()
-for i in range(len(h_range)):
-    plt.plot(x_vals, abs(mean_ens[i]), label = 'T = 0.01, h = %.2f' % h_range[i], alpha = 0.5)
-plt.legend()
-plt.title('Absolute Values of Mean Energy per spin (Width = 128)')
-plt.savefig('stills/mean_energies_collection2.png')
+sample = lattice(temperature = 2)
+sample.make_animation()
