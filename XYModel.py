@@ -121,21 +121,22 @@ class lattice():
     ### showing the system's evolution instead of a still image
 
 plt.close()
-h_range = [0.01, 0.1, 0.5, 0.75, 1, 3, 5, 10]
-x_vals = np.arange(1, 10)
-mean_ens = np.empty(shape = (len(h_range)-4, len(x_vals)))
-for i in range(len(h_range)-4):
+h_range = [0.01, 0.05, 0.1, 0.5, 0.75, 1]
+x_vals = np.arange(1, 500)
+mean_mags = np.empty(shape = (len(h_range), len(x_vals), 20))
+for i in range(len(h_range)):
     for k in range(20):
-        en_lattice = lattice(external_field= h_range[i])
+        mag_lattice = lattice(external_field= h_range[i])
         plt.close()
         for j in range(len(x_vals)):
-            mean_ens[i, j] = np.average(en_lattice.get_energy())
-            en_lattice.poke()
+            mean_mags[i, j, k] = mag_lattice.get_magnetization()
+            mag_lattice.poke()
 
+real_mags = np.mean(mean_mags, axis = 2)
 
 plt.clf()
-for i in range(len(h_range)-4):
-    plt.plot(x_vals, abs(mean_ens[i]), label = 'T = 0.01, h = %.2f' % h_range[i], alpha = 0.5)
+for i in range(len(h_range)):
+    plt.plot(x_vals, abs(real_mags[i]), label = 'T = 0.01, h = %.2f' % h_range[i], alpha = 0.5)
 plt.legend()
-plt.title('Mean Energy per spin (Width = 128)')
-plt.savefig('stills/mean_energies_collection3.png')
+plt.title('Mean Magnetization per spin (Avg. of 20) (Width = 128)')
+plt.savefig('stills/mean_mag_collection2.png')
